@@ -26,6 +26,29 @@
   width: 40px;
 }
 
+.navbar {
+  background: white !important;
+  height: 100px;
+  /* color: var(--fcol1); */
+}
+
+.navbar-brand {
+  /* color: var(--fcol1) !important; */
+}
+
+.navbar-expand-lg {
+  /* color: var(--fcol1) !important; */
+}
+
+.nav-link {
+  /* color: var(--fcol1) !important; */
+}
+
+.show {
+  text-shadow: 1px 1px 3px var(--bg1);
+  margin-top: 22px;
+  backdrop-filter: blur(15px);
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
