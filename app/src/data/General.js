@@ -10,7 +10,7 @@ export const LOGO = logo;
 // links navbar
 export const MENU_LINKS = [
   { name: "Home", to: '/' },
-  { name: "New Pot", to: '/create' },
+  { name: "Create", to: '/create' },
   { name: 'Browse', to: '/browse' },
   { name: 'FAQ', to: '/faq' },
 ];
