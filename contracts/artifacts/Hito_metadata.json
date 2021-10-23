@@ -1,0 +1,554 @@
+{
+	"compiler": {
+		"version": "0.8.2+commit.661d1103"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "hash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint128",
+						"name": "id_start",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "id_end",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "maxBuy",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "votePeriod",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint256",
+						"name": "salestart",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "votestart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteSum",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteYes",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "claimed",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct Hito.MEILENSTEIN[]",
+						"name": "meilensteine",
+						"type": "tuple[]"
+					}
+				],
+				"name": "addPod",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "balances",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getFullPodList",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "creator",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "hash",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "id_start",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "id_end",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "maxBuy",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "votePeriod",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint256",
+								"name": "salestart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "latestMeilenstein",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "id",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "price",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "votestart",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "voteSum",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "voteYes",
+										"type": "uint256"
+									},
+									{
+										"internalType": "bool",
+										"name": "claimed",
+										"type": "bool"
+									}
+								],
+								"internalType": "struct Hito.MEILENSTEIN[]",
+								"name": "meilensteine",
+								"type": "tuple[]"
+							}
+						],
+						"internalType": "struct Hito.POD[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pod",
+						"type": "address"
+					}
+				],
+				"name": "getLatesteilenstein",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "getPod",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "creator",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "hash",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "id_start",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "id_end",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "maxBuy",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "votePeriod",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint256",
+								"name": "salestart",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "latestMeilenstein",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "id",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "price",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "votestart",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "voteSum",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "voteYes",
+										"type": "uint256"
+									},
+									{
+										"internalType": "bool",
+										"name": "claimed",
+										"type": "bool"
+									}
+								],
+								"internalType": "struct Hito.MEILENSTEIN[]",
+								"name": "meilensteine",
+								"type": "tuple[]"
+							}
+						],
+						"internalType": "struct Hito.POD",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPodList",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTimestamp",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "podList",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "pods",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "hash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint128",
+						"name": "id_start",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "id_end",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "maxBuy",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "votePeriod",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint256",
+						"name": "salestart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "latestMeilenstein",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pod",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "usersVote",
+						"type": "bool"
+					}
+				],
+				"name": "vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "voted",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"hito/contracts/Hito.sol": "Hito"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+			"keccak256": "0xf101e8720213560fab41104d53b3cc7ba0456ef3a98455aa7f022391783144a0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3e7820bcf567e6892d937c3cb10db263a4042e446799bca602535868d822384e",
+				"dweb:/ipfs/QmPG2oeDjKncqsEeyYGjAN7CwAJmMgHterXGGnpzhha4z7"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0xa28007762d9da9db878dd421960c8cb9a10471f47ab5c1b3309bfe48e9e79ff4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://796ab6e88af7bf0e78def0f059310c903af6a312b565344e0ff524a0f26e81c6",
+				"dweb:/ipfs/QmcsVgLgzWdor3UnAztUkXKNGcysm1MPneWksF72AvnwBx"
+			]
+		},
+		"hito/contracts/Hito.sol": {
+			"keccak256": "0xb17d994e0dc69763b25e82789792be36bd4dcf75c9410f46f03e0e006053c1b9",
+			"urls": [
+				"bzz-raw://179c531a076fa55e637907fa20dbfb8cff487b2eab5cece1ceeccdcb304e07c7",
+				"dweb:/ipfs/QmRn5EL6xsbPUcK1jWxJ997vpXDnSpmqzURA9wAHd5XG4T"
+			]
+		}
+	},
+	"version": 1
+}
