@@ -1,7 +1,7 @@
 import './App.css';
 import Web3Wrapper from './web3/wrapper/Web3Wrapper';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
-import Home from './pages/Home';
+import { Home, CreatePot, BrowsePots, FAQ } from './pages/index.js';
 import Header from './components/root/Header';
 
 const wrapperConfig = {
@@ -28,6 +28,18 @@ function App() {
           <Switch>
             <Route exact path='/'>
               <Home />
+            </Route>
+
+            <Route exact path='/create'>
+              <CreatePot />
+            </Route>
+
+            <Route exact path='/browse'>
+              <BrowsePots />
+            </Route>
+
+            <Route exact path='/faq'>
+              <FAQ />
             </Route>
 
           </Switch>

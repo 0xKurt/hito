@@ -3,7 +3,7 @@ import { Button, Card, Container, ListGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { useConnectedWeb3, useReadState, useWriteState } from '../web3/hooks';
 
-const Home = () => {
+const CreatePot = () => {
   const history = useHistory();
 
   const onClickHandler = () => {
@@ -11,9 +11,9 @@ const Home = () => {
   }
   return (
     <div className='body'>
-      This will be front + landing page - leave blank for now.  
+      This is where the pot will be created.  
     </div>
   );
 }
 
-export default Home;
+export default CreatePot;
