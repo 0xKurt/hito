@@ -1,115 +1,123 @@
 pragma solidity 0.8.2;
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
+interface aaveMin {
+    function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
+    function withdraw(address asset, uint256 amount, address to) external;
+}
 
 contract Hito {
  
     struct MEILENSTEIN {
         uint256 id;
-        uint256 price;
-        uint256 votestart;
-        uint256 voteSum;
-        uint256 voteYes;
-        bool claimed;
+        string hash;
+        uint256 meilensteinDate;
     }
     
     struct POD {
         address creator;
+        string name;
         string hash;
-        uint128 id_start;
-        uint128 id_end;
-        uint128 maxBuy;
-        uint128 votePeriod; //in minutes for test
-        uint256 salestart;
+        uint256 amount;
         uint256 latestMeilenstein;
-        uint256 price;
+        uint256 fundingPeriod;
+        uint256 start;
         MEILENSTEIN[] meilensteine;
     }
     
     mapping(address => POD) public pods;
-    mapping(address => mapping(uint256 => mapping(address => uint256))) public voted; // pod => meilenstein => user => votedBalance
     address[] public podList;
     address public owner;
-    mapping(address => uint256) public balances;
-    IERC20 dai;
+    mapping(address => uint256) public podBalances;
+    mapping(address => mapping(address => mapping(uint256 => uint256))) public userBalances;  // user => pod => meilenstein => dai balance
     
-    modifier canVote(address pod) {
-        IERC721 token = IERC721(pod);
-        require(token.balanceOf(msg.sender) > 0, 'user is not allowed to vote');
-        uint256 latestMeilenstein = getLatesteilenstein(pod);
-        require(voted[pod][latestMeilenstein][msg.sender] == 0, 'user already voted'); // check if the user has already voted
-        uint256 timestamp = block.timestamp;
-        require(pods[pod].meilensteine[latestMeilenstein].votestart < timestamp 
-        && timestamp < pods[pod].meilensteine[latestMeilenstein].votestart + (pods[pod].votePeriod * 1 minutes), 'vote is not active');
+    IERC20 dai;
+    aaveMin lend;
+
+    constructor(address paymentToken, address aave) {
+        owner = msg.sender;
+        dai = IERC20(paymentToken);
+        lend = aaveMin(aave);
+    }
+    
+    modifier isFundingPhase(address pod) {
+        POD memory p = pods[pod];
+        require(p.meilensteine[p.latestMeilenstein].meilensteinDate >= block.timestamp, 'funding phase not active');
+        require(p.meilensteine[p.latestMeilenstein].meilensteinDate + p.fundingPeriod >= block.timestamp, 'funding phase not active.');
         _;
     }
     
-    constructor() {
-        owner = msg.sender;
-        dai = '0x';
-    }
-    
-    function addPod(address token, string memory hash, uint128 id_start, uint128 id_end, uint128 maxBuy, uint128 votePeriod, uint256 price, uint256 salestart, MEILENSTEIN[] memory meilensteine) public returns(bool) {
-        require(pods[token].salestart == 0, 'pod already exist');
+    function addPod(address token, uint256 tokenSupply, string memory name, string memory hash, uint256 amount, uint256 fundingPeriod, MEILENSTEIN[] memory meilensteine) public returns(bool) {
+        require(IERC20(token).allowance(msg.sender, address(this)) >= tokenSupply, 'allowance not set');
+        require(IERC20(token).balanceOf(msg.sender) >= tokenSupply, 'user has not enough token');
         
-        bool approvedForAll = IERC721(token).isApprovedForAll(msg.sender, address(this));
-        
-        for(uint256 i = id_start; i <= id_end; i++) {
-            if(!approvedForAll) {
-                require(IERC721(token).getApproved(i) == address(this), 'hito contract is not allowed to transfer token');
-            }
-            IERC721(token).transferFrom(msg.sender, address(this), i);
-        }
-        
+        IERC20(token).transferFrom(msg.sender, address(this), tokenSupply);
         pods[token].creator = msg.sender;
+        pods[token].name = name;
         pods[token].hash = hash;
-        pods[token].id_start = id_start;
-        pods[token].id_end = id_end;
-        pods[token].maxBuy = maxBuy;
-        pods[token].votePeriod = votePeriod;
-        pods[token].price = price;
-        pods[token].salestart = salestart;
+        pods[token].amount = amount;
+        pods[token].fundingPeriod = fundingPeriod * 1 minutes;
+        pods[token].start = block.timestamp;
         pods[token].latestMeilenstein = 0;
         
         for(uint i = 0; i < meilensteine.length; i++) {
             pods[token].meilensteine.push(meilensteine[i]);
         }
+        
         podList.push(token);
         
         return true;
     }
     
-    function vote(address pod, bool usersVote) public canVote(pod) {
-        uint256 latestMeilenstein = getLatesteilenstein(pod);
-        uint256 balance = IERC721(pod).balanceOf(msg.sender);
-        addVote(pod, latestMeilenstein, balance);
-        pods[pod].meilensteine[latestMeilenstein].voteSum += balance;
-        if(usersVote) {
-            pods[pod].meilensteine[latestMeilenstein].voteYes += balance;
+    function deposit(address pod, uint256 amount) public isFundingPhase(pod) returns(uint256 tokenAmount) {
+        POD memory p = pods[pod];
+        checkMeilenstein(pod);
+        require(p.latestMeilenstein != p.meilensteine.length, 'latest milestone reached');
+        require(dai.allowance(msg.sender, address(this)) >= amount, 'contract is not allowed to tranfser users funds');
+        dai.transferFrom(msg.sender, address(this), amount);
+        lend.deposit(address(dai), amount, address(this), 0);                                                                // add aave here
+        podBalances[pod] += amount;
+        userBalances[msg.sender][pod][p.latestMeilenstein] += amount;
+        return amount * p.amount;
+    }
+
+    function withdraw(address pod) public isFundingPhase(pod) returns(uint256) {
+        checkMeilenstein(pod);
+        POD memory p = pods[pod];
+        require(p.latestMeilenstein > 0, 'cannot withdraw in first funding phase');
+        uint256 toMeilenstein;
+        
+        if(p.latestMeilenstein == p.meilensteine.length) {
+            toMeilenstein = p.latestMeilenstein + 1;
+        } else {
+            toMeilenstein = p.latestMeilenstein;
         }
+        
+        uint256 amount;
+        for(uint256 i = 0; i < toMeilenstein; i++) {
+            amount += userBalances[msg.sender][pod][i];
+            userBalances[msg.sender][pod][i] = 0;
+        }
+
+        podBalances[pod] -= amount;                                 // aave here
+        lend.withdraw(address(dai), amount, msg.sender)
+       // dai.transfer(msg.sender, amount);
+        IERC20(pod).transfer(msg.sender, amount*p.amount);
     }
     
-    function buy(address token, uint256 amount) public {
-        IERC721 t721 = IERC721(token)
-        POD pod = pods[token];
-        require(amount <= pod.maxBuy, 'amount to high');
-        require(dai.allowance(msg.sender, address(this)) >= amount*pod.price,'contract is not allowed to transfer users funds');
-        require(t721.balanceOf(address(this)) >= amount,'not enough token left');
-        dai.transferFrom(msg.sender, address.this, amount*pod.price);
-        
-        for(int i = pod.id_start; i < pod.id_start + amount; i++ ) {
-            t721.transfer(msg.sender,i);
+    function claimDai(address pod, uint256 amount) public {
+      //  POD p = POD(pod);
+        // calc aave dai balance - sum user dai balance and pay out
+    }
+
+    function checkMeilenstein(address pod) internal {
+        POD memory p = pods[pod];
+        if(block.timestamp >= p.meilensteine[p.latestMeilenstein + 1].meilensteinDate) {
+            pods[pod].latestMeilenstein += 1;
         }
-
-        pods[token].id_start += amount;
     }
 
-    function addVote(address pod, uint256 latestMeilenstein, uint256 amount) internal {
-        voted[pod][latestMeilenstein][msg.sender] = amount;
-    }
-
-    function getLatesteilenstein(address pod) public view returns(uint256) {
+    function getLatestMeilenstein(address pod) public view returns(uint256) {
         return pods[pod].latestMeilenstein;
     }
     
@@ -133,4 +141,13 @@ contract Hito {
         return block.timestamp;
     }
 
+    function getDate(address pod) public view returns(uint) {
+        POD memory p = pods[pod];
+        return p.meilensteine[p.latestMeilenstein].meilensteinDate + p.fundingPeriod;
+    }
+    
+    function getLatestAmount(address pod) public view returns(uint256) {
+        POD memory p = pods[pod];
+        return userBalances[msg.sender][pod][p.latestMeilenstein];
+    }
 }
