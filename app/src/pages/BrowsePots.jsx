@@ -14,9 +14,8 @@ const BrowsePots = () => {
         <div className='body'>
             <h2> Browse Projects </h2>
             <br/>
-            <Container>
+            <Container fluid="sm">
                 <Row>
-                    <Col sm={1}></Col>
                     <Col>
                         <Table striped bordered hover responsive="lg" >
                             <thead>
@@ -58,7 +57,6 @@ const BrowsePots = () => {
 
                         </Table>
                     </Col>
-                    <Col sm={1}></Col>
                 </Row>
             </Container>
 

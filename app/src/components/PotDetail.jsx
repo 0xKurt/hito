@@ -1,125 +1,102 @@
 import React from 'react';
-import { Button, Container, Row, Col, Image, ProgressBar, Table, Form } from 'react-bootstrap';
-import Heart from '../data/img/heart.jpg';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 
 const PotDetail = () => {
     return (
         <div className='potDetail'>
 
+            <br/>
+            <br/>
+
             <Container fluid="sm">
                 <Row>
-                    <Col sm={5}>
-                        <Image src={Heart} rounded />
-                    </Col>
-                    <Col sm={5}>
+                    <Col style={{ fontWeight: "bold" }}>
                         <h3>Very cool project name</h3>
                     </Col>
                 </Row>
                 <br />
                 <Row>
-                    <Col sm={5} style={{ fontWeight: "bold" }}>Description</Col>
+                    <Col style={{ fontWeight: "bold" }}>Description</Col>
                 </Row>
                 <br />
                 <Row>
-                    <Col sm={2}></Col>
-                    <Col sm={7} style={{ textAlign: "left" }}>
-                        Lorem ipsum blarum text geht hier weiter wqeiß ich auch nicht wo der herkommt bla was passiert wenn der Text ganz lang wird sieht man dann oje ogott achja so is tdas
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col sm={5} style={{ fontWeight: "bold" }}>Milestones</Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col sm={2}></Col>
-                    <Col sm={7}>
+                    <Col sm={1}></Col>
 
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Milestone Nr.
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Due in
-                                    </th>
-                                    <th>
-                                        ETH Amount
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#1</td>
-                                    <td>Building a Website</td>
-                                    <td>10 min</td>
-                                    <td>0.005 ETH</td>
-                                </tr>
-                                <tr>
-                                    <td>#2</td>
-                                    <td>Releasing a Shitcoin</td>
-                                    <td>240 min</td>
-                                    <td>0.05 ETH</td>
-                                </tr>
-                                <tr>
-                                    <td>#3</td>
-                                    <td>Work the magic</td>
-                                    <td>4000 min</td>
-                                    <td>0.5 ETH</td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                    <Col style={{ textAlign: "left" }}>
+                        Lorem ipsum blarum text geht hier weiter weiß ich auch nicht wo der herkommt bla was passiert wenn der Text ganz lang wird sieht man dann oje ogott achja so is tdas
+                    </Col>
 
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col sm={5} style={{ fontWeight: "bold" }}>Buy</Col>
-                </Row>
-                <br />
-                <Form>
-                    <Row className="align-items-center">
-                        <Col sm={3}></Col>
-                        <Col sm={4}>
-                            <Form.Group className="mb-3" controlId="formBuyAmount">
-                                <Form.Control type="decimal" placeholder="Amount to buy" />
-                            </Form.Group>
+                    <Col sm={1}></Col>
 
-                        </Col>
-                        <Col sm={2}>
-                            <Button variant="primary" type="submit" size="lg">
-                                Buy
-                            </Button>
-                        </Col>
+                </Row>
+                <br />
+                <Row>
+                    <Col style={{ fontWeight: "bold" }}>Token Distribution</Col>
+                    <Col style={{ textAlign: "left" }}>
+                        10.000 Token
+                    </Col>
+                </Row>
 
-                    </Row>
-                </Form>
                 <br />
                 <Row>
-                    <Col sm={5} style={{ fontWeight: "bold" }}>Stats</Col>
+                    <Col style={{ fontWeight: "bold" }}>Fundraising End</Col>
+                    <Col style={{ textAlign: "left" }}>31.10.2021</Col>
                 </Row>
-                <br />
+                <br/>
                 <Row>
-                    <Col sm={2}></Col>
-                    <Col>
-                        <ProgressBar now={60} />
-                    </Col>
-                    <Col>
-                        x / y NFT's verkauft
+                    <Col sm={10}>
+                        <Button>
+                            Fund
+                        </Button>
                     </Col>
                 </Row>
+
+
                 <br />
                 <Row>
-                    <Col sm={2}></Col>
-                    <Col>
-                        <ProgressBar now={25} />
+                    <Col style={{ fontWeight: "bold" }}>Milestone 1 End</Col>
+                    <Col style={{ textAlign: "left" }}>
+                        31.12.2021
                     </Col>
-                    <Col>
-                        x / y ETH funded
+                </Row>
+                <br/>
+                <Row>
+                    <Col sm={10}>
+                        <Button>
+                            Claim
+                        </Button>
+                    </Col>
+                </Row>
+
+                <br />
+                <Row>
+                    <Col style={{ fontWeight: "bold" }}>Milestone 2 End</Col>
+                    <Col style={{ textAlign: "left" }}>
+                        31.12.2021
+                    </Col>
+                </Row>
+                <br/>
+                <Row>
+                    <Col sm={10}>
+                        <Button disabled>
+                            Claim
+                        </Button>
+                    </Col>
+                </Row>
+
+                <br />
+                <Row>
+                    <Col style={{ fontWeight: "bold" }}>Milestone 3 End</Col>
+                    <Col style={{ textAlign: "left" }}>
+                        31.12.2021
+                    </Col>
+                </Row>
+                <br/>
+                <Row>
+                    <Col sm={10}>
+                        <Button disabled>
+                            Claim
+                        </Button>
                     </Col>
                 </Row>
             </Container>
