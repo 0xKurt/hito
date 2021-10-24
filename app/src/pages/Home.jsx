@@ -3,6 +3,8 @@ import { Button, Card, Container, ListGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { useConnectedWeb3, useReadState, useWriteState } from '../web3/hooks';
 
+import PotDetail from '../components/PotDetail'; 
+
 const Home = () => {
   const history = useHistory();
 
@@ -11,7 +13,7 @@ const Home = () => {
   }
   return (
     <div className='body'>
-      Hallo 
+      <PotDetail /> 
     </div>
   );
 }

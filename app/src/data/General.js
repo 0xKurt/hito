@@ -10,8 +10,8 @@ export const LOGO = logo;
 // links navbar
 export const MENU_LINKS = [
   { name: "Home", to: '/' },
-  { name: 'Team', to: '/team' },
-  { name: 'Roadmap', to: '/roadmap' },
+  { name: "Create", to: '/create' },
+  { name: 'Browse', to: '/browse' },
   { name: 'FAQ', to: '/faq' },
 ];
 
