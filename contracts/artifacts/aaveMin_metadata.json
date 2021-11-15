@@ -39,6 +39,94 @@
 						"internalType": "address",
 						"name": "asset",
 						"type": "address"
+					}
+				],
+				"name": "getReserveData",
+				"outputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "data",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct aaveMin.ReserveConfigurationMap",
+								"name": "configuration",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint128",
+								"name": "liquidityIndex",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "variableBorrowIndex",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "currentLiquidityRate",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "currentVariableBorrowRate",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "currentStableBorrowRate",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint40",
+								"name": "lastUpdateTimestamp",
+								"type": "uint40"
+							},
+							{
+								"internalType": "address",
+								"name": "aTokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "stableDebtTokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "variableDebtTokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "interestRateStrategyAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint8",
+								"name": "id",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct aaveMin.ReserveData",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "asset",
+						"type": "address"
 					},
 					{
 						"internalType": "uint256",
@@ -70,7 +158,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"hito/contracts/Hito.sol": "aaveMin"
+			"hito/contracts/Hito_min.sol": "aaveMin"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -84,12 +172,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-			"keccak256": "0xb03df8481a954604ad0c9125680893b2e3f7ff770fe470e38b89ac61b84e8072",
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0x8b2abd85d0ece7e866e100e9d47ca9cbec93c87cf71a8d267b2b93eb81f7d5e9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b34655953d18ba3a45b762fb6bdbb6549af69a27435e10ece178742bf70baf45",
-				"dweb:/ipfs/QmcqjUoFLLMyx7dbwSHUnDBH6aphkVHXWQvQRRev5EAWEh"
+				"bzz-raw://fe9fa1beb63e4a09637701f783982ba80380d630d600c9cafe26b68bf58be1b2",
+				"dweb:/ipfs/QmRA3GXhTWys88joD9x8xYhdjzvGwmDGLMMzGw3LxbSEge"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
@@ -100,27 +188,11 @@
 				"dweb:/ipfs/Qmbn5Mj7aUn8hJuQ8VrQjjEXRsXyJKykgnjR9p4C3nfLtL"
 			]
 		},
-		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-			"keccak256": "0x83fe24f5c04a56091e50f4a345ff504c8bff658a76d4c43b16878c8f940c53b2",
-			"license": "MIT",
+		"hito/contracts/Hito_min.sol": {
+			"keccak256": "0x773a536e25f8ff92e32fb6f5db12ec1821f03a9f32f4065df1c5f914c6d9d772",
 			"urls": [
-				"bzz-raw://d4c3df1a7ca104b633a7d81c6c6f5192367d150cd5a32cba81f7f27012729013",
-				"dweb:/ipfs/QmSim72e3ZVsfgZt8UceCvbiSuMRHR6WDsiamqNzZahGSY"
-			]
-		},
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x90565a39ae45c80f0468dc96c7b20d0afc3055f344c8203a0c9258239f350b9f",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://26e8b38a7ac8e7b4463af00cf7fff1bf48ae9875765bf4f7751e100124d0bc8c",
-				"dweb:/ipfs/QmWcsmkVr24xmmjfnBQZoemFniXjj3vwT78Cz6uqZW1Hux"
-			]
-		},
-		"hito/contracts/Hito.sol": {
-			"keccak256": "0x46517de8b39391734dc8785be3140f629ccaa867eccee33f71fa6d9d797cce5d",
-			"urls": [
-				"bzz-raw://0f662761b06bb4c74cf401823f433d168a79673468e769d8499d959f14bea584",
-				"dweb:/ipfs/QmeX74UokBDFWrYCciFUKRQiPLZeVgNzLsZ3Ynu7r21SV1"
+				"bzz-raw://9e214468ee9420b7e39ffb70965cebd7380c138b497959838d5f491225ee2011",
+				"dweb:/ipfs/Qmc3RXE2r3dE6djXxyQMcJj8zXsoD2JNF6d3EyY5rQ7vkG"
 			]
 		}
 	},
