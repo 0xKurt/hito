@@ -34,9 +34,9 @@ contract Hito {
     IERC20 dai;
     aaveMin lend;
 
-    constructor(address paymentToken, address aave) {
+    constructor(address daiAddress, address aave) {
         owner = msg.sender;
-        dai = IERC20(paymentToken);
+        dai = IERC20(daiAddress);
         lend = aaveMin(aave);
     }
     
@@ -81,7 +81,7 @@ contract Hito {
         return amount * p.amount;
     }
 
-    function withdraw(address pod) public isFundingPhase(pod) returns(uint256) {
+    function withdraw(address pod) public isFundingPhase(pod) {
         checkMeilenstein(pod);
         POD memory p = pods[pod];
         require(p.latestMeilenstein > 0, 'cannot withdraw in first funding phase');
@@ -100,7 +100,7 @@ contract Hito {
         }
 
         podBalances[pod] -= amount;                                 // aave here
-        lend.withdraw(address(dai), amount, msg.sender)
+        lend.withdraw(address(dai), amount, msg.sender);
        // dai.transfer(msg.sender, amount);
         IERC20(pod).transfer(msg.sender, amount*p.amount);
     }
