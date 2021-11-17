@@ -1,6 +1,5 @@
 import Home from './Home'; 
-import CreatePot from './CreatePot'; 
-import BrowsePots from './BrowsePots';
-import FAQ from './FAQ'; 
+import User from './User'; 
+import Simulation from './Simulation'; 
 
-export {Home, CreatePot, BrowsePots, FAQ}; 
+export {Home, User, Simulation}; 
