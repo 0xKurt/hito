@@ -9,7 +9,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "paymentToken",
+						"name": "daiAddress",
 						"type": "address"
 					},
 					{
@@ -565,10 +565,10 @@
 			]
 		},
 		"hito/contracts/Hito.sol": {
-			"keccak256": "0x46517de8b39391734dc8785be3140f629ccaa867eccee33f71fa6d9d797cce5d",
+			"keccak256": "0x04c6c737589456b2cba4be733b8c28269dfe943538bfe11567f0071efef70780",
 			"urls": [
-				"bzz-raw://0f662761b06bb4c74cf401823f433d168a79673468e769d8499d959f14bea584",
-				"dweb:/ipfs/QmeX74UokBDFWrYCciFUKRQiPLZeVgNzLsZ3Ynu7r21SV1"
+				"bzz-raw://4f7112e52f95eea077dadd868837ff86a855894554491332fe952e724cfc8b14",
+				"dweb:/ipfs/QmNrfFtUV8wmupWz4nqDVq9m6FQwQFXVkADmmXedPL5NXf"
 			]
 		}
 	},

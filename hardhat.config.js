@@ -20,14 +20,12 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.2",
   networks: {
-    rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      accounts: ['0x'+process.env.WALLET_PRIVATE_KEY]
-    },
-    mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      accounts: ['0x'+process.env.WALLET_PRIVATE_KEY]
+  hardhat: {
+    forking: {
+      url: "https://polygon-mainnet.g.alchemy.com/v2/HH-qU-iwvntnlUaqXO91YSqWmlLIGpRS",
+      blockNumber: 20818754
     }
   }
+}
 };
-
+//https://polygon-mainnet.g.alchemy.com/v2/HH-qU-iwvntnlUaqXO91YSqWmlLIGpRS
