@@ -173,6 +173,13 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "init",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -444,10 +451,10 @@
 			]
 		},
 		"hito/contracts/Hito_min.sol": {
-			"keccak256": "0x1dce9699aedf809a9e3c01b8a80804a77802193016118866cb105b5115247e37",
+			"keccak256": "0x1d8aebd7bb6c346e18500b133cabb56b1972f550de8afcaf3bb16632009c2471",
 			"urls": [
-				"bzz-raw://e003456e36416414b0f261cf89aac14f3f38002b0071b3f8fe032c45822633df",
-				"dweb:/ipfs/Qmez48mqKiSos4ctbET23vS5DD5bsUKVaZzp3F1pE7rvpE"
+				"bzz-raw://745152018e28c754e8a52a4073bbf8da5d98798190e7786b0110cf8577d4f2c5",
+				"dweb:/ipfs/QmbXK6BXsaTGCzhabpkVJockzRZyQqZQZ8eiH4VzGC15AK"
 			]
 		}
 	},

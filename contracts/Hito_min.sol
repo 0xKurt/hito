@@ -98,6 +98,11 @@ contract HITO_MIN is Initializable {
         _;
     }
     
+    modifier allowance(uint256 amount) {
+        if(asset.allowance(address(this), address(lend)) < amount) asset.approve(address(lend), MAX_INT);
+        _;
+    }
+    
     constructor() {
         owner = msg.sender;
     }
@@ -110,7 +115,7 @@ contract HITO_MIN is Initializable {
         uint16 fundingPeriodDays,
         MEILENSTEIN memory meilenstein_
         
-        ) public initializer {
+        ) public initializer onlyOwner {
             
         asset = IERC20(asset_);
         lend = aaveMin(aaveLendingPool);
@@ -129,13 +134,25 @@ contract HITO_MIN is Initializable {
         meilenstein = meilenstein_;
     }
     
+    function init() public onlyOwner {
+        initialize(
+            0xe22da380ee6B445bb8273C81944ADEB6E8450422, // asset
+            0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe, // pool
+            0x589650B7E33DAAF2F01ebe27F7182cAAf4C2CA75, // reward token
+            200000000000000000000000,   // reward amount
+            7,                          // funding days
+            MEILENSTEIN("abc123", 7, 1) // meilenstein
+            );
+            start();
+    }
+    
     function start() public onlyOwner {
         if(startDate == MAX_INT) {
             startDate = block.timestamp;
         }
     }
     
-    function deposit(uint256 amount) public isActive isFundingPhase {
+    function deposit(uint256 amount) public isActive isFundingPhase allowance(amount) {
 
         require(asset.allowance(msg.sender, address(this)) >= amount, 'allowance not set');
         require(asset.balanceOf(msg.sender) >= amount, 'user has not enough balance');
@@ -151,7 +168,7 @@ contract HITO_MIN is Initializable {
         userRewards[msg.sender] += reward;
     }
     
-    function withdraw(uint256 amount) public isActive {
+    function withdraw(uint256 amount) public isActive allowance(amount) {
         require(investments[msg.sender] >= amount, 'amount too high');
         require(getIsFundingPhase() || getIsRewardPhase(), 'balance locked in milestone phase');
         totalInvestments -= amount;
@@ -164,7 +181,7 @@ contract HITO_MIN is Initializable {
             rewardToken.transfer(msg.sender, amount);
     }
     
-    function withdrawInterest(uint256 amount) public onlyOwner isActive {
+    function withdrawInterest(uint256 amount) public onlyOwner isActive allowance(amount) {
         uint256 toWithdraw;
         if(amount == 0) {
             toWithdraw = aToken.balanceOf(address(this)) - totalInvestments;
