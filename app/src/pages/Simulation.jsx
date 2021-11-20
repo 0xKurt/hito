@@ -5,10 +5,17 @@ import { useConnectedWeb3, useReadState, useWriteState } from '../web3/hooks';
 
 const Simulation = () => {
     const history = useHistory();
+    const { web3, } = useConnectedWeb3();
 
     const onClickHandler = () => {
         history.push('/exchange')
     }
+
+
+    const deploy = async () => {
+
+    }
+
     return (
         <div className='test'>
             <Container fluid="sm" style={{ backgroundColor: '#efefef' }}>
@@ -31,6 +38,22 @@ const Simulation = () => {
                 <br />
                 <Table striped bordered hover>
                     <tbody>
+                        {/* <tr>
+                            <td style={{ fontWeight: "bold" }}>
+                                Deploy Contract
+                            </td>
+                            <td>
+                                <Button>Deploy</Button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ fontWeight: "bold" }}>
+                                Init Contract
+                            </td>
+                            <td>
+                                <Button>Start </Button>
+                            </td>
+                        </tr> */}
                         <tr>
                             <td style={{ fontWeight: "bold" }}>
                                 Funding Phase
@@ -45,20 +68,6 @@ const Simulation = () => {
                         <tr>
                             <td style={{ fontWeight: "bold" }}>
                                 Milestone Phase
-                            </td>
-                            <td>
-                                <Button>Start </Button>
-                            </td>
-                            <td>
-                                <Button>End</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ fontWeight: "bold" }}>
-                                Claim Phase
-                            </td>
-                            <td>
-                                <Button>Start </Button>
                             </td>
                             <td>
                                 <Button>End</Button>

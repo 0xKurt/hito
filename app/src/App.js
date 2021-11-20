@@ -5,9 +5,9 @@ import { Home, Simulation, User } from './pages/index.js';
 import Header from './components/root/Header';
 
 const wrapperConfig = {
-  infura: '<INFURA_API_KEY>',
+  infura: '09bab57197a241c0a3f998bb0d80691b',
   network: 42,
-  rpc: 'https://kovan.infura.io/v3/<INFURA_API_KEY>',
+  rpc: 'https://kovan.infura.io/v3/09bab57197a241c0a3f998bb0d80691b',
   blockexplorer: {
     url: 'https://kovan.etherscan.io',
     name: 'etherscan'

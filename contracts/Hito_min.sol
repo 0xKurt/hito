@@ -66,20 +66,20 @@ contract HITO_MIN is Initializable {
     uint16 currentMeilenstein = 0;
     
     address public owner;
-    IERC20 asset;
-    IERC20 aToken;
-    IERC20 rewardToken;
+    IERC20 public asset;
+    IERC20 public aToken;
+    IERC20 public rewardToken;
     
     aaveMin.ReserveData reserveData;
     aaveMin lend;
     
-    mapping(address=>uint256) investments;
-    mapping(address=>uint256) userRewards;
-    uint256 totalInvestments = 0;
+    mapping(address=>uint256) public investments;
+    mapping(address=>uint256) public userRewards;
+    uint256 public totalInvestments = 0;
     
-    uint256 startDate = MAX_INT;
-    uint256 fundingPeriod;
-    MEILENSTEIN meilenstein;
+    uint256 public startDate = MAX_INT;
+    uint256 public fundingPeriod;
+    MEILENSTEIN public meilenstein;
 
     modifier onlyOwner {
         require(msg.sender == owner, 'only owner can call this function');
@@ -144,7 +144,7 @@ contract HITO_MIN is Initializable {
         require(rewardToken.balanceOf(address(this)) >= reward, 'balance of rewardToken too low');
         
         asset.transferFrom(msg.sender, address(this), amount);
-        lend.deposit(address(asset), amount, msg.sender, 0);
+        lend.deposit(address(asset), amount, address(this), 0);
         investments[msg.sender] += amount;
         totalInvestments += amount;
         
@@ -207,7 +207,28 @@ contract HITO_MIN is Initializable {
         );
     }
     
+    function setOwner(address newOwner) public onlyOwner {
+        owner = newOwner;
+    }
+    
+    function getInvestments(address user) public view  returns (uint256) {
+        return investments[user];
+    }
+    
+    function getRewards(address user) public view returns (uint256) {
+        return userRewards[user];
+    }
+    
     function getIsRewardPhase() public view returns(bool) {
         return block.timestamp > startDate + fundingPeriod + meilenstein.meilensteinDays*1 days;
+    }
+    
+    // for testing only
+    function endFundingPhase() public onlyOwner {
+        fundingPeriod = 0;
+    }
+    
+    function endMeilensteinPhase() public onlyOwner {
+        meilenstein.meilensteinDays = 0;
     }
 }
