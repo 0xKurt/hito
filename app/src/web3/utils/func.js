@@ -35,7 +35,10 @@ export const wait = (s) => {
 }
 
 export const usdcToHuman = (value) => {
-  return new Intl.NumberFormat('en-DE', {style: 'currency', currency: 'USD', maximumSignificantDigits: 3}).format((value/1000000))
+  return (new Intl.NumberFormat(
+    'en-DE', {style: 'currency', currency: 'USD', maximumSignificantDigits: 3}
+    ).format((value/1000000))
+    ).replace('US$', '$ ')
 }
 
 export const maxINT = () => {
