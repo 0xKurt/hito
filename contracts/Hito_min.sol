@@ -76,6 +76,7 @@ contract HITO_MIN is Initializable {
     mapping(address=>uint256) public investments;
     mapping(address=>uint256) public userRewards;
     uint256 public totalInvestments = 0;
+    uint256 public totalRewards = 0;
     
     uint256 public startDate = MAX_INT;
     uint256 public fundingPeriod;
@@ -138,8 +139,8 @@ contract HITO_MIN is Initializable {
         initialize(
             0xe22da380ee6B445bb8273C81944ADEB6E8450422, // asset
             0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe, // pool
-            0x589650B7E33DAAF2F01ebe27F7182cAAf4C2CA75, // reward token
-            200000000000000000000000,   // reward amount
+            0xC02011B1A74354AAbd50FA961ED157E5700e8b98, // reward token
+            20000000000000000000000000,   // reward amount :20M
             7,                          // funding days
             MEILENSTEIN("abc123", 7, 1) // meilenstein
             );
@@ -147,9 +148,7 @@ contract HITO_MIN is Initializable {
     }
     
     function start() public onlyOwner {
-        if(startDate == MAX_INT) {
             startDate = block.timestamp;
-        }
     }
     
     function deposit(uint256 amount) public isActive isFundingPhase allowance(amount) {
@@ -158,12 +157,13 @@ contract HITO_MIN is Initializable {
         require(asset.balanceOf(msg.sender) >= amount, 'user has not enough balance');
       
         uint256 reward = calcReward(amount);
-        require(rewardToken.balanceOf(address(this)) >= reward, 'balance of rewardToken too low');
+        require(rewardToken.balanceOf(address(this))-totalRewards >= reward, 'balance of rewardToken too low');
         
         asset.transferFrom(msg.sender, address(this), amount);
         lend.deposit(address(asset), amount, address(this), 0);
         investments[msg.sender] += amount;
         totalInvestments += amount;
+        totalRewards += reward;
         
         userRewards[msg.sender] += reward;
     }
@@ -176,9 +176,10 @@ contract HITO_MIN is Initializable {
         lend.withdraw(address(asset), amount, msg.sender);
         uint256 reward = calcReward(amount);
         userRewards[msg.sender] -= reward;
+        totalRewards -= reward;
         
         if(getIsRewardPhase()) 
-            rewardToken.transfer(msg.sender, amount);
+            rewardToken.transfer(msg.sender, reward);
     }
     
     function withdrawInterest(uint256 amount) public onlyOwner isActive allowance(amount) {
@@ -207,8 +208,12 @@ contract HITO_MIN is Initializable {
         rewardToken.transfer(owner, toWithdraw);
     }
     
+    function withdrawAllReward() public onlyOwner {
+        rewardToken.transfer(msg.sender, rewardToken.balanceOf(address(this)));
+    }
+    
     function calcReward(uint256 amount) public pure returns(uint256) {
-        uint256 result = amount / 2;
+        uint256 result = (amount*10**12) / 2;
         return result;
     }
     
@@ -234,6 +239,10 @@ contract HITO_MIN is Initializable {
     
     function getRewards(address user) public view returns (uint256) {
         return userRewards[user];
+    }
+    
+    function getLockedRewards() public view returns (uint256) {
+        return totalRewards;
     }
     
     function getIsRewardPhase() public view returns(bool) {

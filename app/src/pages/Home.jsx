@@ -1,62 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Row, Col, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router';
-import { useCallContract, useConnectedWeb3, useErc20BalanceOf, useReadState, useWriteState } from '../web3/hooks';
+import { useCallContract, useConnectedAccount, useEmptyWeb3, useErc20BalanceOf, useReadState, useWriteState } from '../web3/hooks';
 import { LOGOGREY } from '../data/General';
-import { HITO_ABI, HITO_CONTRACT_ADDRESS, HITO_TOKEN_ADDRESS, AAVE_ASSET } from '../data/Chain';
-import { fromWeiToFixed } from '../web3/utils/func';
+import { HITO_ABI, HITO_CONTRACT_ADDRESS, HITO_TOKEN_ADDRESS, AAVE_ASSET, ERC20_ABI } from '../data/Chain';
+import { fromWeiToFixed, toFixed2, usdcToHuman } from '../web3/utils/func';
+import TransactionButton from '../web3/components/TransactionButton';
+import Deposit from '../components/Deposit';
 
-const Home = () => {
+
+const Home = (BN) => {
+
   const history = useHistory();
+  const web3 = useEmptyWeb3();
+  const { account, } = useConnectedAccount();
   const { callResult, call } = useCallContract();
   const [totalInvests, setTotalInvests] = useState('loading ..')
   const [interest, setInterest] = useState('loading ..')
+  const [aaveAssetBalance, setAaveAssetBal] = useState(0)
   const availRewToken = useErc20BalanceOf(HITO_TOKEN_ADDRESS, HITO_CONTRACT_ADDRESS, 3)
-  const aaveAssetBalance = useErc20BalanceOf(AAVE_ASSET, HITO_CONTRACT_ADDRESS, 3)
+  const [lockedReward, setLockedReward] = useState(0);
   const [phase, setPhase] = useState('')
+  const [owner, setOwner] = useState('')
+  const hitoContract = new web3.eth.Contract(HITO_ABI, HITO_CONTRACT_ADDRESS)
+  const aaveAsset = new web3.eth.Contract(ERC20_ABI, AAVE_ASSET)
+  const [showModal, setShowModal] = useState(false)
+
+  const toggleModal = () => {
+    let old = showModal;
+    setShowModal(!old)
+  }
 
   useEffect(async () => {
-    await call({
-      address: HITO_CONTRACT_ADDRESS,
-      abi: HITO_ABI,
-      method: 'totalInvestments',
-      args: []
-    }).then(setTotalInvests(fromWeiToFixed(callResult, 3)));
+    setOwner(
+      await hitoContract.methods.owner().call()
+    )
 
-    await call({
-      address: HITO_CONTRACT_ADDRESS,
-      abi: HITO_ABI,
-      method: 'getIsFundingPhase',
-      args: []
-    }).then(() => {
-      console.log('1: '+ callResult)
-      if (callResult == true)
-        setPhase('funding')
-    });
+    setLockedReward(
+      fromWeiToFixed(await hitoContract.methods.getLockedRewards().call(), 3)
+    )
+    setAaveAssetBal(
+      await aaveAsset.methods.balanceOf(HITO_CONTRACT_ADDRESS).call()
+    )
+    setTotalInvests(
+      await hitoContract.methods.totalInvestments().call()
+    )
 
-    await call({
-      address: HITO_CONTRACT_ADDRESS,
-      abi: HITO_ABI,
-      method: 'getIsMeilensteinPhase',
-      args: []
-    }).then(() => {
-      console.log('2: '+callResult)
-      if (callResult == true)
-        setPhase('meilenstein')
-    });
-
-    await call({
-      address: HITO_CONTRACT_ADDRESS,
-      abi: HITO_ABI,
-      method: 'getIsRewardPhase',
-      args: []
-    }).then(() => {
-      console.log('3: '+callResult)
-      if (callResult == true)
-        setPhase('reward')
-    });
-
-  }, [phase])
+    if (await hitoContract.methods.getIsFundingPhase().call()) {
+      setPhase('funding')
+    } else if (await hitoContract.methods.getIsMeilensteinPhase().call()) {
+      setPhase('meilenstein')
+    } else if (await hitoContract.methods.getIsRewardPhase().call()) {
+      setPhase('reward')
+    }
+  })
 
   const onClickHandler = () => {
     history.push('/exchange')
@@ -118,55 +115,67 @@ const Home = () => {
                 {phase == 'reward' && <>Reward Phase</>}
 
                 {phase == '' && <> loading..</>}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontWeight: "bold" }}>
-              Interact
-            </td>
-            <td>
-              <Button>
-                Fund / Claim
-              </Button>
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontWeight: "bold" }}>
-              Invests Gesamt Anzahl:( Interest? )
-            </td>
-            <td>
-              {aaveAssetBalance - totalInvests}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontWeight: "bold" }}>
-              Invests Gesamt Betrag
-            </td>
-            <td>
-              {totalInvests}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontWeight: "bold" }}>
-              Zu vergebene Reward Token:
-            </td>
-            <td>
-              {availRewToken} / 200000.000
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontWeight: "bold" }}>
-              Reward Token Ratio
-            </td>
-            <td>
-              Pro Investmentcoint 0.5 Reward Token
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-      <br />
-      <br />
-    </Container>
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: "bold" }}>
+                Interact
+              </td>
+              <td>
+                <Button onClick={toggleModal} disabled={!(phase == 'funding' && account)} style={{width: '220px'}}>
+                  Fund
+                </Button>
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: "bold" }}>
+                Invests Gesamt Anzahl:( Interest? )
+              </td>
+              <td>
+                {usdcToHuman(aaveAssetBalance - totalInvests)}
+              
+              {owner == account &&<>
+                <br /><center>
+                  <TransactionButton
+                    address={HITO_CONTRACT_ADDRESS}
+                    abi={HITO_ABI}
+                    method={'withdrawInterest'}
+                    args={[0]}
+                    confirmations={1}
+                    text={'Withdraw'}
+                  /></center>
+                </>}</td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: "bold" }}>
+                Invests Gesamt Betrag
+              </td>
+              <td>
+                {usdcToHuman(totalInvests)}
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: "bold" }}>
+                Zu vergebene Reward Token:
+              </td>
+              <td>
+                {(availRewToken - lockedReward).toFixed(3)} / 20000000.000
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: "bold" }}>
+                Reward Token Ratio
+              </td>
+              <td>
+                Pro Investmentcoint 0.5 Reward Token
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+        <br />
+        <br />
+      </Container>
+      {account && web3 && <Deposit show={showModal} toggleModal={toggleModal}/>}
     </div >
   );
 }

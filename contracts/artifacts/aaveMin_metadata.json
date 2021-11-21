@@ -189,10 +189,10 @@
 			]
 		},
 		"hito/contracts/Hito_min.sol": {
-			"keccak256": "0x1d8aebd7bb6c346e18500b133cabb56b1972f550de8afcaf3bb16632009c2471",
+			"keccak256": "0xfa0f77fdd992e145b774b54ec63937f350f08494714661854faff2aaf2cc93d5",
 			"urls": [
-				"bzz-raw://745152018e28c754e8a52a4073bbf8da5d98798190e7786b0110cf8577d4f2c5",
-				"dweb:/ipfs/QmbXK6BXsaTGCzhabpkVJockzRZyQqZQZ8eiH4VzGC15AK"
+				"bzz-raw://ac4264cf0f69dd7ac147e88d3827f596fb23dbe26ac9f72960dbcc84b9f8eda2",
+				"dweb:/ipfs/QmeJj8WERVzxtDw5qpS5MvxoZnuaXHNeUBqx744oCScdCr"
 			]
 		}
 	},

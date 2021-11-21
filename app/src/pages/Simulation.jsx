@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, Card, Container, Row, Col, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+import { ERC20_ABI, HITO_ABI, HITO_CONTRACT_ADDRESS, HITO_TOKEN_ADDRESS } from '../data/Chain';
+import TransactionButton from '../web3/components/TransactionButton';
 import { useConnectedWeb3, useReadState, useWriteState } from '../web3/hooks';
+import { maxINT } from '../web3/utils/func';
 
 const Simulation = () => {
     const history = useHistory();
@@ -59,10 +62,14 @@ const Simulation = () => {
                                 Funding Phase
                             </td>
                             <td>
-                                <Button>Start </Button>
-                            </td>
-                            <td>
-                                <Button>End</Button>
+                                <TransactionButton
+                                    address={HITO_CONTRACT_ADDRESS}
+                                    abi={HITO_ABI}
+                                    method={'endFundingPhase'}
+                                    args={[]}
+                                    confirmations={1}
+                                    text={'End'}
+                                />
                             </td>
                         </tr>
                         <tr>
@@ -70,7 +77,59 @@ const Simulation = () => {
                                 Milestone Phase
                             </td>
                             <td>
-                                <Button>End</Button>
+                            <TransactionButton
+                                    address={HITO_CONTRACT_ADDRESS}
+                                    abi={HITO_ABI}
+                                    method={'endMeilensteinPhase'}
+                                    args={[]}
+                                    confirmations={1}
+                                    text={'End'}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ fontWeight: "bold" }}>
+                                Emergency Withdraw Reward Token
+                            </td>
+                            <td>
+                                <TransactionButton
+                                    address={HITO_CONTRACT_ADDRESS}
+                                    abi={HITO_ABI}
+                                    method={'withdrawAllReward'}
+                                    args={[]}
+                                    confirmations={1}
+                                    text={'Withdraw'}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ fontWeight: "bold" }}>
+                                Set HITO allowance
+                            </td>
+                            <td>
+                                <TransactionButton
+                                    address={HITO_TOKEN_ADDRESS}
+                                    abi={ERC20_ABI}
+                                    method={'approve'}
+                                    args={[HITO_CONTRACT_ADDRESS, maxINT()]}
+                                    confirmations={1}
+                                    text={'Approve'}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ fontWeight: "bold" }}>
+                                Re-Init (you need 20M HITO and set allowance)
+                            </td>
+                            <td>
+                                <TransactionButton
+                                    address={HITO_CONTRACT_ADDRESS}
+                                    abi={HITO_ABI}
+                                    method={'init'}
+                                    args={[]}
+                                    confirmations={1}
+                                    text={'Init'}
+                                />
                             </td>
                         </tr>
                     </tbody>

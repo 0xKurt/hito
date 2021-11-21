@@ -5,6 +5,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { css } from "@emotion/react";
 import { FaCheck } from 'react-icons/fa'
 import { ImCross } from 'react-icons/im'
+import useTriggerEvent from '../hooks/internal/useTriggerEvent'
 
 const override = css`
   display: block;
@@ -17,7 +18,7 @@ const TransactionButton = (props) => {
   const { networkId, } = useConnectedNetworkId();
   const network = useReadState('network')
   const blockexplorer = useReadState('blockexplorer')
-
+  const { event, trigger } = useTriggerEvent();
   const send = useSendTransaction();
   const [text, setText] = useState(props.text);
   const [status, setStatus] = useState('')
@@ -42,12 +43,13 @@ const TransactionButton = (props) => {
       setStatus('hash')
       setText(props.language == 'de' ? 'Senden...' : 'Pending...')
       let url = <a target='_blank' href={blockexplorer.url + '/tx/' + hash}>{blockexplorer.name}</a>
-      setMsg(props.language == 'de' ? <>Transaktion auf {url} ansehen.</> : <>View transaction on ${url}</>)
+      setMsg(props.language == 'de' ? <>Transaktion auf {url} ansehen.</> : <>View transaction on {url}</>)
     }).on('receipt', receipt => {
       console.log(receipt)
     }).on('confirmation', number => {
       setStatus('confirmed')
       setText(props.language == 'de' ? 'Erfolgreich!' : 'Confirmed!')
+      trigger();
     }).on('error', error => {
       setText(props.language == 'de' ? 'Error!' : 'Failed!')
       setStatus('error')

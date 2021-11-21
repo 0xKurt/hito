@@ -33,3 +33,11 @@ export const isWalletConnect = (w3) => {
 export const wait = (s) => { 
   return new Promise(res => setTimeout(res, s*1000));
 }
+
+export const usdcToHuman = (value) => {
+  return new Intl.NumberFormat('en-DE', {style: 'currency', currency: 'USD', maximumSignificantDigits: 3}).format((value/1000000))
+}
+
+export const maxINT = () => {
+  return '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+}
